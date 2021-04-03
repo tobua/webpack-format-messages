@@ -1,5 +1,5 @@
 node_modules
-test/fixture
+test/fixture/*/dist
 .DS_Store
 *.lock
 *.log

@@ -1,3 +1,9 @@
+/**
+ * @jest-environment jsdom
+ *
+ * Results differ between node and jsdom...
+ */
+
 const { join } = require("path");
 const webpack = require("webpack");
 const webpack4 = require("webpack-4");
@@ -13,7 +19,7 @@ const run = (runtime, configuration) =>
 	new Promise((done) => {
 		runtime(configuration, (error, stats) => {
 			// These aren't compilation errors, shouldn't occur.
-			expect(error || stats.hasErrors()).toEqual(false);
+			expect(!!error).toEqual(false);
 			done([formatMessages(stats), stats.toJson()]);
 		});
 	});
@@ -98,3 +104,17 @@ suite(
 	// Note different configuration used to trigger warning
 	{}
 );
+
+suite("Shows an error", "test/fixture/error", (formatted, raw, version) => {
+	expect(formatted.errors.length).toEqual(1);
+	expect(formatted.warnings.length).toEqual(0);
+
+	const error = formatted.errors[0];
+	const rawError = raw.errors[0];
+
+	console.log(version);
+	console.log("error", error);
+	console.log("rawError", rawError);
+
+	expect(true).toEqual(true);
+});
